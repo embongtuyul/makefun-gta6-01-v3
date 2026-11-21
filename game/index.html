@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOLMARA — Heat on the Shore</title>
+<link rel="stylesheet" href="./src/style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.min.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="game-container"></div>
+
+<div id="hud">
+  <div id="mission-card" class="panel">
+    <div id="mission-title">WELCOME TO SOLMARA</div>
+    <div id="mission-stage">STAGE 1/2</div>
+    <div id="mission-objective">Meet Lina at the Marina</div>
+    <div id="mission-next">NEXT: The Meridian Job</div>
+  </div>
+
+  <div id="top-right">
+    <div id="clock">DAY 1 · 17:40</div>
+    <div id="money">$350</div>
+    <div id="stars">☆☆☆☆☆</div>
+    <div id="wanted-label">CLEAN</div>
+  </div>
+
+  <div id="rank-box" class="panel">
+    <div id="rank-text">RANK 1</div>
+    <div class="rp-track"><div id="rp-fill"></div></div>
+    <div id="rp-text">0/300 RP</div>
+  </div>
+
+  <div id="radio"><span id="radio-text">RADIO SOLMAR 101.3 — Marisol Vega — Golden Hour Drive</span></div>
+
+  <div id="autopilot-ind">◉ AUTOPILOT — any driving key cancels</div>
+
+  <div id="map-box">
+    <canvas id="minimap" width="180" height="180"></canvas>
+    <div id="district" class="panel">
+      <div id="district-name">DOWNTOWN SOLMARA</div>
+      <div id="district-flavour">The city's beating heart</div>
+      <div id="district-control">CONTROL 58%</div>
+    </div>
+  </div>
+
+  <div id="vitals">
+    <div class="bar-row">
+      <span class="bar-label" id="health-text">HEALTH 100</span>
+      <div class="bar-track"><div id="health-fill"></div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label" id="armour-text">ARMOUR 40</span>
+      <div class="bar-track"><div id="armour-fill"></div></div>
+    </div>
+    <div id="weapon-slots"></div>
+  </div>
+
+  <div id="speed-box" class="panel">
+    <div id="speed-text">0 KM/H</div>
+    <div id="condition-text">CONDITION 100%</div>
+    <div class="cond-track"><div id="condition-fill"></div></div>
+  </div>
+
+  <div id="prompt"></div>
+
+  <div id="dialogue" class="panel">
+    <div id="dialogue-name">LINA</div>
+    <div id="dialogue-text"></div>
+    <div id="dialogue-progress">1/3 · ENTER ▸</div>
+  </div>
+
+  <div id="banner">
+    <div id="banner-title">MISSION COMPLETE</div>
+    <div id="banner-sub"></div>
+  </div>
+</div>
+
+<div id="damage-flash"></div>
+
+<div id="start-screen" class="overlay">
+  <div class="game-title">SOLMARA</div>
+  <div class="game-subtitle">HEAT ON THE SHORE</div>
+  <div class="game-tag">A sun-soaked coastal city at golden hour. Steal cars, outrun the
+  law, and work your way up from nobody to king of the shore. Original city,
+  original story — built for make.fun's GTA 6 bounty.</div>
+  <button id="play-btn" class="big-btn">▶ PLAY</button>
+  <div class="controls-grid">
+    <span><b>WASD</b> Move / Drive</span><span><b>MOUSE</b> Look</span>
+    <span><b>F</b> Steal / Exit car</span><span><b>E / ENTER</b> Talk / Interact</span>
+    <span><b>SPACE</b> Jump / Handbrake</span><span><b>SHIFT</b> Sprint</span>
+    <span><b>CLICK</b> Punch / Shoot</span><span><b>R</b> Reload</span>
+    <span><b>1–5</b> Weapons</span><span><b>F9</b> Autopilot</span>
+    <span><b>ESC / P</b> Pause</span><span></span>
+  </div>
+</div>
+
+<div id="pause-menu" class="overlay hidden">
+  <div class="menu-title">PAUSED</div>
+  <div class="pause-cols">
+    <div>
+      <h3>ISLAND MAP</h3>
+      <canvas id="island-map" width="250" height="250"></canvas>
+      <div class="map-legend">★ = district visited · ◆ = mission marker</div>
+    </div>
+    <div>
+      <h3>STORY MISSIONS</h3>
+      <div id="pause-missions"></div>
+    </div>
+    <div>
+      <h3>CAREER</h3>
+      <div>Cash: <b id="stat-money">$350</b></div>
+      <div>Rank: <b id="stat-rank">RANK 1 · 0 RP</b></div>
+      <div>Cars stolen: <b id="stat-cars">0</b></div>
+      <div>Pedestrians hit: <b id="stat-peds">0</b></div>
+      <div>Missions done: <b id="stat-missions">0/8</b></div>
+      <div>Cash earned: <b id="stat-earned">$0</b></div>
+    </div>
+    <div>
+      <h3>CONTROLS</h3>
+      <div><b>WASD</b> Move / Drive</div>
+      <div><b>MOUSE</b> Look around</div>
+      <div><b>F</b> Steal / Exit car</div>
+      <div><b>E / ENTER</b> Talk / Interact</div>
+      <div><b>SPACE</b> Jump / Handbrake</div>
+      <div><b>CLICK</b> Punch / Shoot</div>
+      <div><b>R</b> Reload</div>
+      <div><b>1–5</b> Weapons</div>
+      <div><b>F9</b> Autopilot</div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button id="resume-btn" class="big-btn">RESUME</button>
+    <button id="restart-btn" class="big-btn secondary">RESTART</button>
+  </div>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
